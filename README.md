@@ -106,7 +106,7 @@ git commit -m "chore: initialize Django project"
 Create a new GitHub repository with the same project name, **without** a README, `.gitignore`, or license.
 
 ```bash
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+git remote add origin https://github.com/morecoldbrewplease/YOUR_MF_REPOSITORY.git
 git remote -v
 git push -u origin main
 ```
