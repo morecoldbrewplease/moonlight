@@ -1,46 +1,75 @@
-all these steps are after create a new vault and cd to it
-create a vault
-uv init [vault's name]
+# Django Project Setup Workflow
 
-change directory
-cd [directory]
+**Stack:** `uv` · Django · Git · GitHub · pre-commit · Ruff
 
-check generated files
+## 1. Create project & environment
+
+```bash
+uv init [project-name]
+cd [project-name]
 dir
 
-add python version
-uv python 3.13 [py ver]
-
-create synchronizes .venv-uv.lock
+uv python pin 3.13
 uv sync
+uv add django
 
-add Django
-uv add Django
-
-verify installation
 uv run python --version
 uv run django-admin --version
+```
 
-create Django prj with config vault
+## 2. Create Django project
+
+```bash
 uv run django-admin startproject config .
-
-check if everything correct
 uv run python manage.py check
 uv run python manage.py migrate
 uv run python manage.py runserver
+```
 
-reate a .gitignore file in the project root before committing
+## 3. Configure Git
 
-initialize Git
+Create `.gitignore` in the project root:
+
+```gitignore
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+```
+
+Initialize Git:
+
+```bash
 git init
-git branch -m main
+git branch -M main
 git status
+```
 
-install and config pre-commit
+## 4. Configure pre-commit & Ruff
+
+```bash
 uv add --dev pre-commit ruff
+```
 
-create .pre-commit-config.yaml in the root directory
+Create `.pre-commit-config.yaml`:
 
+```yaml
 repos:
   - repo: local
     hooks:
@@ -55,19 +84,51 @@ repos:
         entry: uv run ruff format
         language: system
         types: [python]
+```
 
-install git hook
+Install and run hooks:
+
+```bash
 uv run pre-commit install
-
-run all config check
 uv run pre-commit run --all-files
-git 
-make init commit
+```
+
+## 5. Initial commit
+
+```bash
 git add .
 git status
-git commit -m ""
+git commit -m "chore: initialize Django project"
+```
 
-On GitHub, create a new repository with the same project name, wo readme, ignore
-git remote add origin https://github.com/morecoldbrewplease/kafi.git
+## 6. Connect to GitHub
+
+Create a new GitHub repository with the same project name, **without** a README, `.gitignore`, or license.
+
+```bash
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
 git remote -v
 git push -u origin main
+```
+
+## 7. Daily workflow
+
+```bash
+# Update dependencies
+uv sync
+
+# Check Django & run tests
+uv run python manage.py check
+uv run python manage.py test
+
+# After changing models
+uv run python manage.py makemigrations
+uv run python manage.py migrate
+
+# Review, commit & push
+git status
+git diff
+git add .
+git commit -m "feat: describe your change"
+git push
+```
