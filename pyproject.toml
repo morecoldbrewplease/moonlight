@@ -1,0 +1,25 @@
+[project]
+name = "moonlight"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "morecoldbrewplease", email = "trungtt129.w@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "django>=6.1.2",
+]
+
+[project.scripts]
+moonlight = "moonlight:main"
+
+[build-system]
+requires = ["uv_build>=0.12.22,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.7.0",
+    "ruff>=0.17.2",
+]
